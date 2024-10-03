@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <cstdlib> // Para exit
 using namespace std;
 
 //  Realizar un sistema para el control de ventas en un local. Cada
@@ -27,21 +28,23 @@ struct Venta{
 };
 
 void mostrar_menu(){
-    cout<<"======que quiere hacer?====="<<endl;
-    cout<<"1. hacer compra"<<endl;
-    cout<<"2. mostrar total ventas del dia"<<endl;
-    cout<<"3. mostrar productos mas vendidos"<<endl;
-    cout<<"4. buscar producto (por codigo)"<<endl;
+    cout<<endl;
+    cout<<"======Que quiere hacer?====="<<endl;
+    cout<<"1. Hacer compra"<<endl;
+    cout<<"2. Mostrar total ventas del dia"<<endl;
+    cout<<"3. Mostrar productos mas vendidos"<<endl;
+    cout<<"4. Buscar producto (por codigo)"<<endl;
+    cout<<"5. Salir"<<endl;
 }
 
-void registrar_venta(vector <Producto> catalogo,vector <Venta> total_ventas){
+void registrar_venta(vector <Producto> catalogo,vector <Venta> &total_ventas){
     Venta venta1;
     int vcodigo;
     int vcantidad;
     cout << "Ingrese la fecha de hoy: " << endl;
     cout << "Día (1-30): ";
     cin >> venta1.fecha_venta.dia;
-    while (venta1.fecha_venta.dia < 1 || venta1.fecha_venta.dia > 30) {
+    while (venta1.fecha_venta.dia < 1 || venta1.fecha_venta.dia >= 30) {
         cout << "Día inválido. Debe estar entre 1 y 30. Intente nuevamente: ";
         cin >> venta1.fecha_venta.dia;
     }
@@ -56,7 +59,7 @@ void registrar_venta(vector <Producto> catalogo,vector <Venta> total_ventas){
     cout<<"ingrese primero el codigo del producto que quiere y luego la cantidad de este,\nsi no esta en stock se le avisará\n";
     cout<<"codigo: ";
     cin>>vcodigo;
-    for (long unsigned i = 0; i < catalogo.size(); i++){
+    for (int i = 0; i < catalogo.size(); i++){
         if(catalogo[i].codigo == vcodigo){
             venta1.venta_codigo = vcodigo;
             cout<<"stock actual: "<<catalogo[i].stock<<endl;
@@ -70,7 +73,7 @@ void registrar_venta(vector <Producto> catalogo,vector <Venta> total_ventas){
                 else{
                     venta1.venta_cantidad = vcantidad;
                     total_ventas.push_back(venta1);
-                    cout<<"venta completada!";
+                    cout<<"venta completada!"<<endl;
                     break;
                 }
             }
@@ -82,17 +85,37 @@ void registrar_venta(vector <Producto> catalogo,vector <Venta> total_ventas){
 void venta_por_dia(vector <Venta> total_ventas){
     int ddia,dmes;
     cout<<"ingrese dia y mes que quiera ver el total de sus ventas: ";
-    cin>>ddia,dmes;
+    cout<<"dia: ";
+    cin>>ddia;
+    cout<<"mes: ";
+    cin>>dmes;
     for (int i = 0; i < total_ventas.size(); i++)
     {
         if (ddia == total_ventas[i].fecha_venta.dia && dmes == total_ventas[i].fecha_venta.mes)
         {
-            cout<<total_ventas.size();
-        }else{
+            cout<<"el total de ventas del dia "<<ddia<<"/"<<dmes<<" es: "<<total_ventas[i].venta_cantidad<<endl;
+        }
+        else{
             cout<<"no hay ventas ese dia"<<endl;
         }
     }
-    
+}
+
+void producto_mas_vendido(vector <Venta> total_ventas){
+    cout<<"en proceso...";
+}
+
+void buscar_producto(vector <Producto> catalogo){
+    int bcodigo;
+    cout<<"ingrese el codigo del producto deseado: ";
+    cin>>bcodigo;
+    for (int i = 0; i < catalogo.size(); i++){
+        if (catalogo[i].codigo == bcodigo){
+            cout<<"el codigo "<<bcodigo<<" representa al producto: "<<catalogo[i].nombre<<"."<<endl;
+            return; //termina la funcion y en este caso vuelve el main
+        }
+    }
+    cout<<"el codigo que ingresó no se ha podido encontrar en el catalogo :("<<endl;
 }
 
 int main(){
@@ -119,20 +142,36 @@ int main(){
     catalogo.push_back(p2);
     catalogo.push_back(p3);
     
-    mostrar_menu();
-    cin>>opcion;
-    switch (opcion)
-    {
-    case 1:
-        registrar_venta(catalogo,total_ventas);
-        break;
+    while (true){
+        mostrar_menu();
+        cout<<"Ingrese opcion: ";
+        cin>>opcion;
+        switch (opcion)
+        {
+        case 1:
+            registrar_venta(catalogo,total_ventas);
+            break;
 
-    case 2:
-        venta_por_dia(total_ventas);
-        break;
+        case 2:
+            venta_por_dia(total_ventas);
+            break;
 
-    default:
-        cout<<"opcion invalida";
-        break;
+        case 3:
+            producto_mas_vendido(total_ventas);
+            break;
+
+        case 4:
+            buscar_producto(catalogo);
+            break;
+
+        case 5:
+            cout<<"SALIENDO..."<<endl;
+            return 0;
+
+        default:
+            cout<<"OPCION INVALIDA"<<endl;
+            cout<<"SALIENDO..."<<endl;
+            return 0;
+        }
     }
 }
