@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <cstdlib> // Para exit
 using namespace std;
 
 //  Realizar un sistema para el control de ventas en un local. Cada
@@ -29,7 +28,7 @@ struct Venta{
 
 void mostrar_menu(){
     cout<<endl;
-    cout<<"======Que quiere hacer?====="<<endl;
+    cout<<"=======Que quiere hacer?======="<<endl;
     cout<<"1. Hacer compra"<<endl;
     cout<<"2. Mostrar total ventas del dia"<<endl;
     cout<<"3. Mostrar productos mas vendidos"<<endl;
@@ -89,10 +88,9 @@ void venta_por_dia(vector <Venta> total_ventas){
     cin>>ddia;
     cout<<"mes: ";
     cin>>dmes;
-    for (int i = 0; i < total_ventas.size(); i++)
+    for (int i = 0; i <= total_ventas.size(); i++)
     {
-        if (ddia == total_ventas[i].fecha_venta.dia && dmes == total_ventas[i].fecha_venta.mes)
-        {
+        if (ddia == total_ventas[i].fecha_venta.dia && dmes == total_ventas[i].fecha_venta.mes){
             cout<<"el total de ventas del dia "<<ddia<<"/"<<dmes<<" es: "<<total_ventas[i].venta_cantidad<<endl;
         }
         else{
